@@ -1,0 +1,114 @@
+html, body, main  {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+.container {
+    width: 100%;
+    height: 100%;
+    background-color: lightpink;
+    border: 2px solid rebeccapurple;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.toppane {
+    background-color: magenta;
+    width: 100%;
+    min-height: 65vh;
+    padding: 0;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.bottompane {
+    width: 100%;
+    min-height: 180px;
+    background-color: greenyellow;
+    flex: 1;
+}
+
+.leftpane {
+    flex: 7;
+    background-color: yellow;
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.leftpane .video {
+    width: 100%;
+    background-color: lightblue;
+    flex: 1;
+    position: relative;
+}
+
+.leftpane .video video {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.leftpane .controls {
+    width: 100%;
+    min-height: 3em;
+    background: indianred;
+}
+
+.rightpane {
+    flex: 3;
+    background-color: dodgerblue;
+    position: relative;
+}
+
+.transcriptcontainer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.transcript {
+    position: absolute;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding: 0.5em;
+    overflow-y: scroll;
+}
+
+.transcriptline {
+    cursor: pointer;
+}
+
+.transcriptline.current {
+    color: white;
+    animation-name: currenthighlight;
+    animation-duration: 2s;
+}
+
+@keyframes currenthighlight {
+    from { color: black}
+    to { color: white;}
+}
+
+.timelines {
+    width: 95%;
+    height: 1.1em;
+    margin: auto;
+    padding: 0;
+    background-color: white;
+    position: relative;
+}
+
+.timelines .transcriptcue {
+    display: inline-block;
+    background-color: orangered;
+    cursor: pointer;
+}
