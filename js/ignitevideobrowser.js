@@ -12,11 +12,7 @@ var IgniteVideoBrowser = function (name, videoUrl, captionsUrl, captionsLoadedCa
     var videoElement = null
     var totaltimeElement = null
     var transcriptBrowser = null
-    var timelineElement = null
-    var timelinewordInputElement = null
-    var timelinewordSubmitElement = null
-    var timelinewordResetElement = null
-    var timelinewordStatusElement = null
+    var wordsTimeline = null
 
     var captionsData = null // Object with cues property. Cue looks like this:
     /*
@@ -38,18 +34,17 @@ var IgniteVideoBrowser = function (name, videoUrl, captionsUrl, captionsLoadedCa
     function findElements() {
         videoElement = document.querySelector("video." + name)
         totaltimeElement = document.querySelector(".videotime." + name)
-        
-        
+
+
         var transcriptelement = document.querySelector(".transcript." + name)
-        if(transcriptelement) {
+        if (transcriptelement) {
             transcriptBrowser = new TranscriptBrowser(thisBrowser, transcriptelement)
         }
 
-        timelineElement = document.querySelector(".timelines." + name)
-        timelinewordInputElement = document.querySelector(".timelineword." + name)
-        timelinewordSubmitElement = document.querySelector(".timelinesubmit." + name)
-        timelinewordResetElement = document.querySelector(".timelinereset." + name)
-        timelinewordStatusElement = document.querySelector(".timelinestatus." + name)
+        var timelineelement = document.querySelector(".timelines." + name)
+        if(timelineelement) {
+            wordsTimeline = new WordsTimeLine(thisBrowser, timelineelement)
+        }
     }
 
     function videoLoaded(event) {
@@ -84,7 +79,7 @@ var IgniteVideoBrowser = function (name, videoUrl, captionsUrl, captionsLoadedCa
                         loadVideo()
                         addsummary()
                         addtranscript()
-                        setupwordform()
+                        setupwordstimeline()
                     }
                 )
             }
@@ -118,87 +113,31 @@ var IgniteVideoBrowser = function (name, videoUrl, captionsUrl, captionsLoadedCa
     }
 
     function addtranscript() {
-        if(transcriptBrowser) {
+        if (transcriptBrowser) {
             transcriptBrowser.addTranscript()
         }
     }
 
-    function cleartimeline() {
-        if (timelineElement)
-            timelineElement.innerHTML = ""
-
-        if (timelinewordInputElement)
-            timelinewordInputElement.value =""
-            
-        if (timelinewordStatusElement)
-            timelinewordStatusElement.innerHTML = ""
-    }
-
-    function addwordtotimeline(word) {
-        if (!(timelineElement && captionsData && captionsData.cues.length > 0))
-            return
-
-        timelineElement.innerHTML = ""
-
-        let lastcue = captionsData.cues[captionsData.cues.length - 1]
-        let totaltime = lastcue.endTime
-
-        let filteredcues = captionsData.cues.filter(function (item) {
-            return item.text.toLowerCase().includes(word.toLowerCase())
-        })
-
-        if (timelinewordStatusElement)
-            timelinewordStatusElement.innerHTML = filteredcues.length + " occurences."
-
-        filteredcues.forEach(function (cue) {
-            let cuetime = cue.endTime - cue.startTime
-            let cuewidth = (cuetime / totaltime) * 100
-
-            let cueposition = (cue.startTime / totaltime) * 100
-
-            let newBlock = document.createElement("div")
-            newBlock.setAttribute("class", "transcriptcue")
-            newBlock.setAttribute("data-starttime", cue.startTime)
-            newBlock.setAttribute("data-ordinal", cue.ordinal)
-            newBlock.style.position = "absolute"
-            newBlock.style.left = cueposition + "%"
-            newBlock.style.width = cuewidth + "%"
-            newBlock.innerHTML = "&nbsp;"
-            newBlock.setAttribute("title", timefromms(cue.startTime * 1000))
-            newBlock.addEventListener("click", transcriptpointerclick)
-            timelineElement.appendChild(newBlock)
-        })
-    }
-
-    function formsubmitclick(event) {
-        if (timelinewordInputElement) {
-            let word = timelinewordInputElement.value
-            if (word === "") {
-                cleartimeline()
-            } else {
-                addwordtotimeline(word)
-            }
+    function setupwordstimeline() {
+        if(wordsTimeline) {
+            wordsTimeline.setup()
         }
     }
 
-    function formresetclick(event) {
-        cleartimeline()
-    }
-
-    function setupwordform() {
-        if (timelinewordSubmitElement)
-            timelinewordSubmitElement.addEventListener("click", formsubmitclick)
-        if (timelinewordResetElement)
-            timelinewordResetElement.addEventListener("click", formresetclick)
+    function settranscriptcurrentcue(ordinal) {
+        if(transcriptBrowser) {
+            transcriptBrowser.setCurrentCue(ordinal)
+        }
     }
 
     function currentcuechanged(ordinal) {
         var currentcue = captionsData.cues[ordinal]
         setvideoposition(currentcue.startTime)
+        settranscriptcurrentcue(ordinal)
     }
 
 
-    this.instanceName = function() {
+    this.instanceName = function () {
         return name
     }
 
@@ -209,9 +148,8 @@ var IgniteVideoBrowser = function (name, videoUrl, captionsUrl, captionsLoadedCa
     this.currentCueChanged = currentcuechanged
 
     this.addSummary = addsummary
-    this.addWordToTimeline = function (word) {
-        addwordtotimeline(word)
-    }
+
+    this.timefromms = timefromms
 
     findElements()
     if (captionsUrl) {

@@ -31,7 +31,7 @@ function TranscriptBrowser(transcripter, transcriptElement) {
             //setvideoposition(starttime)
             transcripter.currentCueChanged(ordinal)
 
-            settranscriptposition(ordinal)
+            //settranscriptposition(ordinal)
         }
     }
 
@@ -50,13 +50,14 @@ function TranscriptBrowser(transcripter, transcriptElement) {
                 newDiv.style.cursor = 'pointer'
                 newDiv.innerHTML = cue.text
 
-                newDiv.addEventListener("click", transcriptpointerclick)
+                //newDiv.addEventListener("click", transcriptpointerclick)
                 transcriptElement.appendChild(newDiv)
             }
         }
     }
 
 
+    this.setCurrentCue = settranscriptposition
     this.addTranscript = addtranscript
 
     transcriptElement.style.position = 'absolute'

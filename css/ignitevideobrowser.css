@@ -108,7 +108,7 @@ html, body, main  {
     position: relative;
 }
 
-.timelines .transcriptcue {
+.timelines .timelinecue {
     display: inline-block;
     background-color: orangered;
     cursor: pointer;
