@@ -1,7 +1,7 @@
 "use strict";
 
 function TranscriptBrowser(transcripter, transcriptElement) {
-    if(!this) {
+    if (!this) {
         return new TranscriptBrowser(transcripter)
     }
 
@@ -23,14 +23,16 @@ function TranscriptBrowser(transcripter, transcriptElement) {
 
     function transcriptpointerclick(event) {
         let thispointer = event.target
-        let thisclass = thispointer.getAttribute("class")
-        let starttime = thispointer.getAttribute("data-starttime")
-        let ordinal = thispointer.getAttribute("data-ordinal")
 
-        //setvideoposition(starttime)
-        transcripter.currentCueChanged(ordinal)
+        if (thispointer.classList.contains('transcriptcue')) {
+            //let starttime = thispointer.getAttribute("data-starttime")
+            var ordinal = thispointer.getAttribute("data-ordinal")
 
-        settranscriptposition(ordinal)
+            //setvideoposition(starttime)
+            transcripter.currentCueChanged(ordinal)
+
+            settranscriptposition(ordinal)
+        }
     }
 
     function addtranscript() {
@@ -62,6 +64,7 @@ function TranscriptBrowser(transcripter, transcriptElement) {
     transcriptElement.style.height = '100%'
     transcriptElement.style.boxSizing = 'border-box'
     transcriptElement.style.overflowY = 'scroll'
+    transcriptElement.addEventListener("click", transcriptpointerclick)
 
     return this
 }
