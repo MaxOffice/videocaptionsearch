@@ -10,7 +10,7 @@ app.get("/bounce", function serveBounceFile(req, res, next) {
 
 app.use("/css", express.static("css"))
 app.use("/js", express.static("js"))
-//app.use("/assets", express.static("assets"))
+app.use("/assets", express.static("assets"))
 
 
 function serveIndex(req, res, next){

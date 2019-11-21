@@ -11,7 +11,7 @@ var IgniteVideoBrowser = function (name, videoUrl, captionsUrl, captionsLoadedCa
 
     var videoElement = null
     var totaltimeElement = null
-    var transcriptElement = null
+    var transcriptBrowser = null
     var timelineElement = null
     var timelinewordInputElement = null
     var timelinewordSubmitElement = null
@@ -38,7 +38,13 @@ var IgniteVideoBrowser = function (name, videoUrl, captionsUrl, captionsLoadedCa
     function findElements() {
         videoElement = document.querySelector("video." + name)
         totaltimeElement = document.querySelector(".videotime." + name)
-        transcriptElement = document.querySelector(".transcript." + name)
+        
+        
+        var transcriptelement = document.querySelector(".transcript." + name)
+        if(transcriptelement) {
+            transcriptBrowser = new TranscriptBrowser(thisBrowser, transcriptelement)
+        }
+
         timelineElement = document.querySelector(".timelines." + name)
         timelinewordInputElement = document.querySelector(".timelineword." + name)
         timelinewordSubmitElement = document.querySelector(".timelinesubmit." + name)
@@ -46,7 +52,7 @@ var IgniteVideoBrowser = function (name, videoUrl, captionsUrl, captionsLoadedCa
         timelinewordStatusElement = document.querySelector(".timelinestatus." + name)
     }
 
-    function videoLoaded(videoElement) {
+    function videoLoaded(event) {
         videoReady = true
     }
 
@@ -111,49 +117,9 @@ var IgniteVideoBrowser = function (name, videoUrl, captionsUrl, captionsLoadedCa
         }
     }
 
-    function settranscriptposition(ordinal) {
-        if (transcriptElement) {
-            let currentline = transcriptElement.children[ordinal]
-            if (currentline) {
-
-                let oldcurrent = transcriptElement.querySelector(".current")
-                if (oldcurrent)
-                    oldcurrent.classList.remove("current")
-
-                currentline.scrollIntoView({ block: 'nearest' })
-                currentline.classList.add("current")
-
-            }
-        }
-    }
-
-    function transcriptpointerclick(event) {
-        let thispointer = event.target
-        let thisclass = thispointer.getAttribute("class")
-        let starttime = thispointer.getAttribute("data-starttime")
-        let ordinal = thispointer.getAttribute("data-ordinal")
-
-        setvideoposition(starttime)
-
-        settranscriptposition(ordinal)
-    }
-
     function addtranscript() {
-        if (transcriptElement && captionsData) {
-            transcriptElement.innerHTML = ""
-
-            let limit = captionsData.cues.length
-            for (let i = 0; i < limit; i++) {
-                let cue = captionsData.cues[i]
-                let newDiv = document.createElement("div")
-                newDiv.setAttribute("class", "transcriptline")
-                newDiv.setAttribute("data-starttime", cue.startTime)
-                newDiv.setAttribute("data-ordinal", i)
-                newDiv.innerHTML = cue.text
-                //newDiv.addEventListener("click", transcriptlineclick)
-                newDiv.addEventListener("click", transcriptpointerclick)
-                transcriptElement.appendChild(newDiv)
-            }
+        if(transcriptBrowser) {
+            transcriptBrowser.addTranscript()
         }
     }
 
@@ -226,9 +192,21 @@ var IgniteVideoBrowser = function (name, videoUrl, captionsUrl, captionsLoadedCa
             timelinewordResetElement.addEventListener("click", formresetclick)
     }
 
+    function currentcuechanged(ordinal) {
+        var currentcue = captionsData.cues[ordinal]
+        setvideoposition(currentcue.startTime)
+    }
+
+
+    this.instanceName = function() {
+        return name
+    }
+
     this.data = function () {
         return captionsData
     }
+
+    this.currentCueChanged = currentcuechanged
 
     this.addSummary = addsummary
     this.addWordToTimeline = function (word) {

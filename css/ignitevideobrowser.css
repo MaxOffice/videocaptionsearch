@@ -75,19 +75,20 @@ html, body, main  {
 }
 
 .transcript {
-    position: absolute;
+    /* position: absolute;
     box-sizing: border-box;
     width: 100%;
-    height: 100%;
+    height: 100%; */
     padding: 0.5em;
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
 }
 
-.transcriptline {
-    cursor: pointer;
+.transcriptcue {
+    /* cursor: pointer; */
+    color: initial;
 }
 
-.transcriptline.current {
+.transcriptcue.current {
     color: white;
     animation-name: currenthighlight;
     animation-duration: 2s;
