@@ -94,6 +94,7 @@ html, body, main  {
 
 .transcriptcue {
     cursor: pointer;
+    margin-bottom: 6px;
 }
 
 .transcriptcue.current {
