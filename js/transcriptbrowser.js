@@ -5,7 +5,7 @@ function TranscriptBrowser(transcripter, transcriptElement) {
         return new TranscriptBrowser(transcripter)
     }
 
-    function settranscriptposition(ordinal) {
+    function settranscriptposition(ordinal, interactive) {
         if (transcriptElement) {
             let currentline = transcriptElement.children[ordinal]
             if (currentline) {
@@ -14,7 +14,10 @@ function TranscriptBrowser(transcripter, transcriptElement) {
                 if (oldcurrent)
                     oldcurrent.classList.remove("current")
 
-                currentline.scrollIntoView({ block: 'center' })
+                if (!interactive) {
+                    currentline.scrollIntoView({ block: 'center', behavior: 'auto' })
+                }
+
                 currentline.classList.add("current")
 
             }
@@ -29,7 +32,7 @@ function TranscriptBrowser(transcripter, transcriptElement) {
             var ordinal = thispointer.getAttribute("data-ordinal")
 
             //setvideoposition(starttime)
-            transcripter.currentCueChanged(ordinal)
+            transcripter.currentCueChanged(ordinal, true)
 
             //settranscriptposition(ordinal)
         }

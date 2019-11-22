@@ -125,16 +125,16 @@ var IgniteVideoBrowser = function (name, videoUrl, captionsUrl, captionsLoadedCa
         }
     }
 
-    function settranscriptcurrentcue(ordinal) {
+    function settranscriptcurrentcue(ordinal, interactive) {
         if(transcriptBrowser) {
-            transcriptBrowser.setCurrentCue(ordinal)
+            transcriptBrowser.setCurrentCue(ordinal, interactive)
         }
     }
 
-    function currentcuechanged(ordinal) {
+    function currentcuechanged(ordinal, interactive) {
         var currentcue = captionsData.cues[ordinal]
         setvideoposition(currentcue.startTime)
-        settranscriptcurrentcue(ordinal)
+        settranscriptcurrentcue(ordinal, interactive)
     }
 
 
