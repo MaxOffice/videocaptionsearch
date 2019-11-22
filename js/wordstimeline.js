@@ -68,9 +68,9 @@ function WordsTimeLine(transcripter, timelineElement) {
         let newCol2 = document.createElement("div")
         newCol2.classList.add("col", "col-2")
 
-        let wordDeleter = document.createElement("div")
+        let wordDeleter = document.createElement("img")
         wordDeleter.classList.add("deleteword")
-        wordDeleter.innerText = "X"
+        wordDeleter.src = "assets/remove.svg"
         wordDeleter.title = "Delete word"
 
         newCol2.appendChild(wordDeleter)

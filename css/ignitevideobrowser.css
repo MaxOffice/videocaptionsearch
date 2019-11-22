@@ -177,8 +177,9 @@ html, body, main  {
 }
 
 .wordstimeline .col-2 {
-    width: 1.1em;
-    max-width: 1.1em;
+    width: 1.5em;
+    max-width: 1.5em;
+    text-align: center;
 }
 .wordstimeline .col-3 {
     position: relative;
@@ -189,6 +190,8 @@ html, body, main  {
 
 .wordstimeline .deleteword {
     cursor: pointer;
+    vertical-align: middle;
+    width: 1.1em;
 }
 
 .wordstimeline .timelinecue {
