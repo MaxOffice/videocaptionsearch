@@ -150,7 +150,9 @@ html, body, main  {
     display: table;
     width: 100%;
 }
-
+.wordstimeline .timelineword {
+    width: 280px;
+}
 .wordstimeline .body {
     display: table;
     width: 100%;
