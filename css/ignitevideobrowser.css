@@ -1,35 +1,43 @@
+* {
+    box-sizing: border-box;
+}
+
 html, body, main  {
     margin: 0;
     padding: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
 }
 .container {
     width: 100%;
     height: 100%;
     background-color: lightpink;
-    border: 2px solid rebeccapurple;
+    /* border: 2px solid rebeccapurple; */
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    /* justify-content: flex-start; */
 }
 
 .toppane {
     background-color: magenta;
     width: 100%;
     min-height: 65vh;
+    max-height: 65vh;
     padding: 0;
 
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
+    flex: 1;
 }
 
 .bottompane {
     width: 100%;
-    min-height: 180px;
+    padding: 0.25em;
     background-color: greenyellow;
+    /* min-height: 35vh;*/
+    max-height: 35vh; 
     flex: 1;
 }
 
@@ -117,17 +125,34 @@ html, body, main  {
 }
 
 .wordstimeline {
-    display: table;
-    width: 95%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
     margin: auto;
-    padding: 5px;
+    background-color: violet ;
+}
+
+.wordstimeline .headercontainer {
+    padding: 5px 5px 0px 5px;
+
+}
+.wordstimeline .bodycontainer {
+    padding: 0 5px;
+    height: 100%;
+    overflow-y: scroll;
+    flex: 1;
 }
 .wordstimeline .header {
-    display: table-header-group;
+    display: table;
+    width: 100%;
 }
 
 .wordstimeline .body {
-    display: table-row-group;
+    display: table;
+    width: 100%;
+    background-color: yellow;
 }
 
 .wordstimeline .row {
@@ -158,4 +183,6 @@ html, body, main  {
     display: inline-block;
     background-color: orangered;
     cursor: pointer;
+    position: absolute;
+    top: 0;
 }

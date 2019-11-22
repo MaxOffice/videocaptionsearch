@@ -1,6 +1,7 @@
 "use strict";
 
 const WTLTEMPLATE = `
+<div class="headercontainer">
 <div class="header">
 <div class="row">
     <div class="col col-1">
@@ -29,7 +30,10 @@ const WTLTEMPLATE = `
     </div>
 </div>
 </div>
+</div>
+<div class="bodycontainer">
 <div class="body">
+</div>
 </div>
 `
 
@@ -118,7 +122,6 @@ function WordsTimeLine(transcripter, timelineElement) {
             newBlock.setAttribute("class", "timelinecue")
             newBlock.setAttribute("data-starttime", cue.startTime)
             newBlock.setAttribute("data-ordinal", cue.ordinal)
-            newBlock.style.position = "absolute"
             newBlock.style.left = cueposition + "%"
             newBlock.style.width = cuewidth + "%"
             newBlock.innerHTML = "&nbsp;"
@@ -128,6 +131,8 @@ function WordsTimeLine(transcripter, timelineElement) {
         })
 
         timelineRowsElement.appendChild(row)
+        timelineRowsElement.querySelector('div.row:last-child').scrollIntoView()
+        
     }
 
     function timelinecueclick(event) {
