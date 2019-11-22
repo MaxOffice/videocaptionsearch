@@ -14,61 +14,15 @@
                     <div class="video">
                         <video id="ignitevideo" class="main" controls></video>
                     </div>
-                    <!--
-                    <div class="controls">
-                        <button class="control main">Play/Pause</button>
-                    </div>
-                    -->
                 </div>
-                <div class="rightpane">
-                    <!-- <div class="transcriptcontainer"> -->
-                        <div class="transcript main">
+                <div class="rightpane nocaptionhide">
+                    <div class="transcript main">
 
-                        </div>
-                    <!-- </div> -->
-                </div>
-            </div>
-            <!--
-            <div class="bottompane">
-
-                <div>
-                    <div class="timelineform main">
-                        <label>Video time: <span class="videotime main"></span></label>
-                        <input class="timelineword main" />
-                        <button class="timelinesubmit main">Show</button>
-                        <button class="timelinereset main">Clear</button>
-                        <span class="timelinestatus main"></span>
                     </div>
                 </div>
-                <div class="timelines main">
-
-                </div>
             </div>
-            -->
-            <div class="bottompane">
+            <div class="bottompane nocaptionhide">
                 <div class="wordstimeline main">
-                    <!--
-                    <div class="row">
-                        <div class="col col-1">
-                            <b>Words</b>
-                        </div>
-                        <div class="col col-2">
-                            <input class="timelineword main" />
-                            <button class="timelinesubmit main">Show</button>
-                            <button class="timelinereset main">Clear</button>
-                            <span class="timelinestatus main"></span>    
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col col-1">
-
-                        </div>
-                        <div class="col col-2">
-                            <div style="float:left">00:00:00</div>
-                            <div style="float:right">24:00:00</div>
-                        </div>
-                    </div>
-                    -->
                 </div>
             </div>
         </div>
@@ -83,15 +37,21 @@
         //var videoLink = ""
         //var srtLink = "bounce?q=https://medius.studios.ms/video/asset/CAPTION/IG19-BRK1047"
         //var srtLink = "assets/IG19-BRK1047.vtt"
-        var currentURL=new URL(document.location)
+        var currentURL = new URL(document.location)
         var videotitle = currentURL.searchParams.get('title')
-        if(videotitle) {
+        if (videotitle) {
             document.title = videotitle
         }
 
         var videoLink = currentURL.searchParams.get("video")
         var captionsquery = currentURL.searchParams.get("captions")
-        var srtLink = captionsquery ? "bounce?q=" + captionsquery : "" 
+        var srtLink = captionsquery ? "bounce?q=" + captionsquery : ""
+
+        if (!captionsquery) {
+            document.querySelectorAll(".nocaptionhide").forEach(function (element, key) {
+                element.classList.add('hidden')
+            })
+        }
 
         var browser = new IgniteVideoBrowser("main", videoLink, srtLink /*, function (ivb) {
 
