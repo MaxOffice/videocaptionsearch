@@ -72,7 +72,7 @@ html, body, main  {
 
 .rightpane {
     flex: 3;
-    background-color: dodgerblue;
+    background-color: #f4f4f4;
     position: relative;
 }
 
@@ -96,7 +96,8 @@ html, body, main  {
 }
 
 .transcriptcue.current {
-    color: white;
+    color: #f4f4f4;
+    background-color: black;
     /*
     animation-name: currenthighlight;
     animation-duration: 2s;
