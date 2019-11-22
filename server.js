@@ -2,7 +2,7 @@ let express = require("express")
 let request = require("request")
 
 let app = express()
-let port = 8000
+let port = process.env.PORT || 8000
 
 app.get("/bounce", function serveBounceFile(req, res, next) {
     request(req.query.q).pipe(res)

@@ -41,7 +41,8 @@ var IgniteVideoBrowser = function (name, videoUrl, captionsUrl, captionsLoadedCa
             transcriptBrowser = new TranscriptBrowser(thisBrowser, transcriptelement)
         }
 
-        var timelineelement = document.querySelector(".timelines." + name)
+        //var timelineelement = document.querySelector(".timelines." + name)
+        var timelineelement = document.querySelector(".wordstimeline." + name)
         if(timelineelement) {
             wordsTimeline = new WordsTimeLine(thisBrowser, timelineelement)
         }
@@ -150,6 +151,14 @@ var IgniteVideoBrowser = function (name, videoUrl, captionsUrl, captionsLoadedCa
     this.addSummary = addsummary
 
     this.timefromms = timefromms
+
+    this.videoLastTime = function() {
+        if (captionsReady) {
+            return timefromms(captionsData.cues[captionsData.cues.length-1].endTime*1000).substr(0,8)
+        } else {
+            return "00:00:00"
+        }
+    }
 
     findElements()
     if (captionsUrl) {

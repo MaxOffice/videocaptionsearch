@@ -90,8 +90,10 @@ html, body, main  {
 
 .transcriptcue.current {
     color: white;
+    /*
     animation-name: currenthighlight;
     animation-duration: 2s;
+    */
 }
 
 @keyframes currenthighlight {
@@ -109,6 +111,50 @@ html, body, main  {
 }
 
 .timelines .timelinecue {
+    display: inline-block;
+    background-color: orangered;
+    cursor: pointer;
+}
+
+.wordstimeline {
+    display: table;
+    width: 95%;
+    margin: auto;
+    padding: 5px;
+}
+.wordstimeline .header {
+    display: table-header-group;
+}
+
+.wordstimeline .body {
+    display: table-row-group;
+}
+
+.wordstimeline .row {
+    display: table-row;
+}
+
+.wordstimeline .col {
+    display: table-cell;
+}
+
+.wordstimeline .col-1 {
+    /*min-width: 3em;*/
+    width: 10em;
+    max-width: 10em;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.wordstimeline .col-2 {
+    width: 1.1em;
+    max-width: 1.1em;
+}
+.wordstimeline .col-3 {
+    position: relative;
+}
+
+.wordstimeline .timelinecue {
     display: inline-block;
     background-color: orangered;
     cursor: pointer;

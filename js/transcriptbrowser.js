@@ -14,7 +14,7 @@ function TranscriptBrowser(transcripter, transcriptElement) {
                 if (oldcurrent)
                     oldcurrent.classList.remove("current")
 
-                currentline.scrollIntoView({ block: 'nearest' })
+                currentline.scrollIntoView({ block: 'center' })
                 currentline.classList.add("current")
 
             }

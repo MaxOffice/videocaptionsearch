@@ -1,5 +1,38 @@
 "use strict";
 
+const WTLTEMPLATE = `
+<div class="header">
+<div class="row">
+    <div class="col col-1">
+    &nbsp;        
+    </div>
+    <div class="col col-2">
+    &nbsp;
+    </div>
+    <div class="col col-3">
+        <input class="timelineword" />
+        <button class="timelinesubmit" type="submit">Show</button>
+        <button class="timelinereset">Clear</button>
+        <span class="timelinestatus"></span>
+    </div>
+</div>
+<div class="row">
+    <div class="col col-1">
+    &nbsp;
+    </div>
+    <div class="col col-2">
+    &nbsp;
+    </div>
+    <div class="col col-3">
+        <div style="float:left">00:00:00</div>
+        <div style="float:right" class="endtime">00:00:00</div>
+    </div>
+</div>
+</div>
+<div class="body">
+</div>
+`
+
 function WordsTimeLine(transcripter, timelineElement) {
     if (!this) {
         return new WordsTimeLine(transcripter)
@@ -10,37 +43,56 @@ function WordsTimeLine(transcripter, timelineElement) {
     var timelinewordInputElement = null
     var timelinewordSubmitElement = null
     var timelinewordResetElement = null
-    var timelinewordStatusElement = null
+
+    var endTimeElement = null
+    var timelineRowsElement = null
 
     function cleartimeline() {
-        if (timelineElement)
-            timelineElement.innerHTML = ""
-
-        if (timelinewordInputElement)
-            timelinewordInputElement.value = ""
-
-        if (timelinewordStatusElement)
-            timelinewordStatusElement.innerHTML = ""
+        timelinewordInputElement.value = ""
+        timelineRowsElement.innerHTML = ""
+        timelinewordInputElement.focus()
     }
 
-    function timelinecueclick(event) {
-        let currentcue = event.target
+    function addrowtotable() {
+        let fragment = document.createDocumentFragment()
 
-        if (currentcue.classList.contains('timelinecue')) {
-            //let starttime = thispointer.getAttribute("data-starttime")
-            let ordinal = currentcue.getAttribute("data-ordinal")
+        let newRow = document.createElement("div")
+        newRow.classList.add("row")
 
-            //setvideoposition(starttime)
-            transcripter.currentCueChanged(ordinal)
+        let newCol1 = document.createElement("div")
+        newCol1.classList.add("col", "col-1")
+
+        let newCol2 = document.createElement("div")
+        newCol2.classList.add("col", "col-2")
+
+        let wordDeleter = document.createElement("div")
+        wordDeleter.classList.add("delete")
+        wordDeleter.innerText = "X"
+        wordDeleter.style.cursor = 'pointer'
+
+        newCol2.appendChild(wordDeleter)
+
+        let newCol3 = document.createElement("div")
+        newCol3.classList.add("col", "col-3")
+        newCol3.style.backgroundColor = 'white'
+
+        newRow.appendChild(newCol1)
+        newRow.appendChild(newCol2)
+        newRow.appendChild(newCol3)
+
+        fragment.appendChild(newRow)
+
+        return {
+            row: fragment,
+            wordcell: newCol1,
+            cuescell: newCol3
         }
     }
-    
+
     function addwordtotimeline(word) {
         var captionsData = transcripter.data()
-        if (!(timelineElement && captionsData && captionsData.cues.length > 0))
+        if (!(captionsData && captionsData.cues.length > 0))
             return
-
-        timelineElement.innerHTML = ""
 
         let lastcue = captionsData.cues[captionsData.cues.length - 1]
         let totaltime = lastcue.endTime
@@ -49,8 +101,12 @@ function WordsTimeLine(transcripter, timelineElement) {
             return item.text.toLowerCase().includes(word.toLowerCase())
         })
 
-        if (timelinewordStatusElement)
-            timelinewordStatusElement.innerHTML = filteredcues.length + " occurences."
+        let newrow = addrowtotable()
+        let row = newrow.row
+        let wordcell = newrow.wordcell
+        let cuescell = newrow.cuescell
+
+        wordcell.innerText = word + " (" + filteredcues.length + ")"
 
         filteredcues.forEach(function (cue) {
             let cuetime = cue.endTime - cue.startTime
@@ -66,19 +122,33 @@ function WordsTimeLine(transcripter, timelineElement) {
             newBlock.style.left = cueposition + "%"
             newBlock.style.width = cuewidth + "%"
             newBlock.innerHTML = "&nbsp;"
-            newBlock.setAttribute("title", transcripter.timefromms(cue.startTime * 1000))
-            newBlock.addEventListener("click", timelinecueclick)
-            timelineElement.appendChild(newBlock)
+            newBlock.setAttribute("title", cue.text)
+
+            cuescell.appendChild(newBlock)
         })
+
+        timelineRowsElement.appendChild(row)
+    }
+
+    function timelinecueclick(event) {
+        let currentcue = event.target
+
+        if (currentcue.classList.contains('timelinecue')) {
+            let ordinal = currentcue.getAttribute("data-ordinal")
+            transcripter.currentCueChanged(ordinal)
+
+        } else if (currentcue.classList.contains('delete')) {
+            currentcue.parentElement.parentElement.remove()
+        }
     }
 
     function formsubmitclick(event) {
         if (timelinewordInputElement) {
             let word = timelinewordInputElement.value
-            if (word === "") {
-                cleartimeline()
-            } else {
+            if (word.trim() !== "") {
                 addwordtotimeline(word)
+                timelinewordInputElement.value = ""
+                timelinewordInputElement.focus()
             }
         }
     }
@@ -87,20 +157,33 @@ function WordsTimeLine(transcripter, timelineElement) {
         cleartimeline()
     }
 
-    function setupwordform() {
-        if (timelinewordSubmitElement)
-            timelinewordSubmitElement.addEventListener("click", formsubmitclick)
-        if (timelinewordResetElement)
-            timelinewordResetElement.addEventListener("click", formresetclick)
+    function setup() {
+        timelineElement.innerHTML = WTLTEMPLATE
+        timelinewordInputElement = timelineElement.querySelector(".timelineword")
+
+        timelinewordSubmitElement = timelineElement.querySelector(".timelinesubmit")
+        timelinewordSubmitElement.addEventListener("click", formsubmitclick)
+
+        timelinewordResetElement = timelineElement.querySelector(".timelinereset")
+        timelinewordResetElement.addEventListener("click", formresetclick)
+
+        endTimeElement = timelineElement.querySelector(".endtime")
+        endTimeElement.innerText = transcripter.videoLastTime()
+
+        timelineRowsElement = timelineElement.querySelector(".body")
+
+        timelinewordInputElement.onkeypress = function (event) {
+            if (event.keyCode === 13) {
+                timelinewordSubmitElement.click()
+                event.preventDefault()
+            }
+        }
     }
 
-    this.setup = setupwordform
+    this.setup = setup
 
-
-    timelinewordInputElement = document.querySelector(".timelineword." + name)
-    timelinewordSubmitElement = document.querySelector(".timelinesubmit." + name)
-    timelinewordResetElement = document.querySelector(".timelinereset." + name)
-    timelinewordStatusElement = document.querySelector(".timelinestatus." + name)
+    timelineElement.innerHTML = ""
+    timelineElement.addEventListener("click", timelinecueclick)
 
     return this
 }
