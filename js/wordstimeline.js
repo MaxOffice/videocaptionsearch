@@ -5,7 +5,7 @@ const WTLTEMPLATE = `
 <div class="header">
 <div class="row">
     <div class="col col-1">
-    <button class="timelinereset">Clear All</button>        
+    <button class="timelinereset atleastoneword hidden">Clear All</button>        
     </div>
     <div class="col col-2">
     &nbsp;
@@ -24,8 +24,8 @@ const WTLTEMPLATE = `
     &nbsp;
     </div>
     <div class="col col-3">
-        <div style="float:left">00:00:00</div>
-        <div style="float:right" class="endtime">00:00:00</div>
+        <div style="float:left" class="atleastoneword hidden">00:00:00</div>
+        <div style="float:right" class="endtime atleastoneword hidden">00:00:00</div>
     </div>
 </div>
 </div>
@@ -50,10 +50,23 @@ function WordsTimeLine(transcripter, timelineElement) {
     var endTimeElement = null
     var timelineRowsElement = null
 
+    function hideshowsearchelements() {
+        let searchelements = timelineElement.querySelectorAll(".atleastoneword")
+        let hide = (timelineRowsElement.children.length === 0)
+        for(let i=0;i<searchelements.length;i++) {
+            if(hide) {
+                searchelements[i].classList.add('hidden')
+            } else {
+                searchelements[i].classList.remove('hidden')
+            }
+        }
+    }
+
     function cleartimeline() {
         timelinewordInputElement.value = ""
         timelineRowsElement.innerHTML = ""
         timelinewordInputElement.focus()
+        hideshowsearchelements()
     }
 
     function addrowtotable() {
@@ -130,7 +143,7 @@ function WordsTimeLine(transcripter, timelineElement) {
 
         timelineRowsElement.appendChild(row)
         timelineRowsElement.querySelector('div.row:last-child').scrollIntoView()
-        
+        hideshowsearchelements()
     }
 
     function timelinecueclick(event) {
@@ -142,6 +155,7 @@ function WordsTimeLine(transcripter, timelineElement) {
 
         } else if (currentcue.classList.contains('deleteword')) {
             currentcue.parentElement.parentElement.remove()
+            hideshowsearchelements()
         }
     }
 

@@ -135,6 +135,9 @@ html, body, main  {
     background-color: #ff9100 ;
     color: black;
 }
+.wordstimeline .hidden {
+    display: none;
+}
 
 .wordstimeline .headercontainer {
     padding: 5px 5px 0px 5px;
