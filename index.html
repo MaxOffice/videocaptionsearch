@@ -84,6 +84,11 @@
         //var srtLink = "bounce?q=https://medius.studios.ms/video/asset/CAPTION/IG19-BRK1047"
         //var srtLink = "assets/IG19-BRK1047.vtt"
         var currentURL=new URL(document.location)
+        var videotitle = currentURL.searchParams.get('title')
+        if(videotitle) {
+            document.title = videotitle
+        }
+
         var videoLink = currentURL.searchParams.get("video")
         var captionsquery = currentURL.searchParams.get("captions")
         var srtLink = captionsquery ? "bounce?q=" + captionsquery : "" 
