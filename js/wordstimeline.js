@@ -5,15 +5,14 @@ const WTLTEMPLATE = `
 <div class="header">
 <div class="row">
     <div class="col col-1">
-    &nbsp;        
+    <button class="timelinereset">Clear All</button>        
     </div>
     <div class="col col-2">
     &nbsp;
     </div>
     <div class="col col-3">
-        <input class="timelineword" />
-        <button class="timelinesubmit" type="submit">Show</button>
-        <button class="timelinereset">Clear</button>
+        <input class="timelineword" placeholder="Type search text (Enter)" />
+        <button class="timelinesubmit" type="submit">Search</button>
         <span class="timelinestatus"></span>
     </div>
 </div>
