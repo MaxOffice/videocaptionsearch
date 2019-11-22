@@ -70,15 +70,14 @@ function WordsTimeLine(transcripter, timelineElement) {
         newCol2.classList.add("col", "col-2")
 
         let wordDeleter = document.createElement("div")
-        wordDeleter.classList.add("delete")
+        wordDeleter.classList.add("deleteword")
         wordDeleter.innerText = "X"
-        wordDeleter.style.cursor = 'pointer'
+        wordDeleter.title = "Delete word"
 
         newCol2.appendChild(wordDeleter)
 
         let newCol3 = document.createElement("div")
         newCol3.classList.add("col", "col-3")
-        newCol3.style.backgroundColor = 'white'
 
         newRow.appendChild(newCol1)
         newRow.appendChild(newCol2)
@@ -118,16 +117,16 @@ function WordsTimeLine(transcripter, timelineElement) {
 
             let cueposition = (cue.startTime / totaltime) * 100
 
-            let newBlock = document.createElement("div")
-            newBlock.setAttribute("class", "timelinecue")
-            newBlock.setAttribute("data-starttime", cue.startTime)
-            newBlock.setAttribute("data-ordinal", cue.ordinal)
-            newBlock.style.left = cueposition + "%"
-            newBlock.style.width = cuewidth + "%"
-            newBlock.innerHTML = "&nbsp;"
-            newBlock.setAttribute("title", cue.text)
+            let cueElement = document.createElement("div")
+            cueElement.setAttribute("class", "timelinecue")
+            cueElement.setAttribute("data-starttime", cue.startTime)
+            cueElement.setAttribute("data-ordinal", cue.ordinal)
+            cueElement.style.left = cueposition + "%"
+            cueElement.style.width = cuewidth + "%"
+            cueElement.innerHTML = "&nbsp;"
+            cueElement.setAttribute("title", cue.text)
 
-            cuescell.appendChild(newBlock)
+            cuescell.appendChild(cueElement)
         })
 
         timelineRowsElement.appendChild(row)
@@ -142,7 +141,7 @@ function WordsTimeLine(transcripter, timelineElement) {
             let ordinal = currentcue.getAttribute("data-ordinal")
             transcripter.currentCueChanged(ordinal)
 
-        } else if (currentcue.classList.contains('delete')) {
+        } else if (currentcue.classList.contains('deleteword')) {
             currentcue.parentElement.parentElement.remove()
         }
     }
