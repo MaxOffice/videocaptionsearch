@@ -18,7 +18,7 @@ html, body, main  {
 .container {
     width: 100%;
     height: 100%;
-    background-color: lightpink;
+    background-color: #ffdc74;
     /* border: 2px solid rebeccapurple; */
     box-sizing: border-box;
     display: flex;
@@ -99,13 +99,13 @@ html, body, main  {
 }
 
 .middlepane .title {
-    font-size: 4.5vh;
+    font-size: 20px;
     font-weight: bolder;
 }
 
 .middlepane .instructions {
     text-align: right;
-    font-size: x-small;
+    font-size: small;
 }
 
 .transcriptcontainer {
@@ -220,7 +220,6 @@ html, body, main  {
 
 .wordstimeline .header .starttime {
     float: left;
-    margin-left: -1.1em;
     margin-top: 0.25em;
 }
 
