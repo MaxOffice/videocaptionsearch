@@ -24,8 +24,8 @@ const WTLTEMPLATE = `
     &nbsp;
     </div>
     <div class="col col-3">
-        <div style="float:left" class="atleastoneword hidden">00:00:00</div>
-        <div style="float:right" class="endtime atleastoneword hidden">00:00:00</div>
+        <div class="starttime atleastoneword hidden">00:00:00</div>
+        <div class="endtime atleastoneword hidden">00:00:00</div>
     </div>
 </div>
 </div>

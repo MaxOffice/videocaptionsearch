@@ -43,7 +43,7 @@ html, body, main  {
     padding: 0.25em;
     background-color: #ff9100;
     /* min-height: 35vh;*/
-    max-height: 35vh; 
+    max-height: 30vh; 
     flex: 1;
 }
 
@@ -80,6 +80,32 @@ html, body, main  {
     flex: 3;
     background-color: #f4f4f4;
     position: relative;
+}
+
+.middlepane {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 5px 10px;
+    max-height: 5vh;
+    flex-wrap: nowrap;
+}
+
+
+.middlepane span {
+    vertical-align: middle;
+    flex: 1;
+    white-space: nowrap;
+}
+
+.middlepane .title {
+    font-size: 4.5vh;
+    font-weight: bolder;
+}
+
+.middlepane .instructions {
+    text-align: right;
+    font-size: x-small;
 }
 
 .transcriptcontainer {
@@ -187,9 +213,22 @@ html, body, main  {
     max-width: 1.5em;
     text-align: center;
 }
+
 .wordstimeline .col-3 {
     position: relative;
 }
+
+.wordstimeline .header .starttime {
+    float: left;
+    margin-left: -1.1em;
+    margin-top: 0.25em;
+}
+
+.wordstimeline .header .endtime {
+    float: right;
+    margin-top: 0.25em;
+}
+
 .wordstimeline .body .col-3 {
     background-color: #f4f4f4;
 }
@@ -206,4 +245,5 @@ html, body, main  {
     cursor: pointer;
     position: absolute;
     top: 0;
+    height: 100%;
 }

@@ -21,6 +21,9 @@
                     </div>
                 </div>
             </div>
+            <div class="middlepane">
+                <span id="title" class="title"></span>&nbsp;<span class="instructions">To download the video, please right click it above, and choose "Save video as..."</span>
+            </div>
             <div class="bottompane nocaptionhide">
                 <div class="wordstimeline main">
                 </div>
@@ -32,20 +35,27 @@
     <script src="js/wordstimeline.js"></script>
     <script src="js/ignitevideobrowser.js"></script>
     <script lang="javascript">
-
-        //var videoLink = "https://medius.studios.ms/video/asset/HIGHMP4/IG19-BRK1047"
-        //var videoLink = ""
-        //var srtLink = "bounce?q=https://medius.studios.ms/video/asset/CAPTION/IG19-BRK1047"
-        //var srtLink = "assets/IG19-BRK1047.vtt"
-        var currentURL = new URL(document.location)
-        var videotitle = currentURL.searchParams.get('title')
+        let currentURL = new URL(document.location)
+        
+        let videotitle = currentURL.searchParams.get('title')
         if (videotitle) {
             document.title = videotitle
+            let titleElement = document.getElementById('title')
+            if(titleElement) {
+                titleElement.innerText = videotitle
+            }
         }
 
-        var videoLink = currentURL.searchParams.get("video")
+        let videolink = currentURL.searchParams.get("video")
+        if(videolink) {
+            let downloadElement = document.getElementById('downloadlink')
+            if(downloadElement) {
+                downloadElement.href = videolink
+            }
+        }
+
         var captionsquery = currentURL.searchParams.get("captions")
-        var srtLink = captionsquery ? "bounce?q=" + captionsquery : ""
+        var captionslink = captionsquery ? "bounce?q=" + captionsquery : ""
 
         if (!captionsquery) {
             document.querySelectorAll(".nocaptionhide").forEach(function (element, key) {
@@ -53,9 +63,7 @@
             })
         }
 
-        var browser = new IgniteVideoBrowser("main", videoLink, srtLink /*, function (ivb) {
-
-        }*/)
+        var browser = new IgniteVideoBrowser("main", videolink, captionslink)
     </script>
 </body>
 
