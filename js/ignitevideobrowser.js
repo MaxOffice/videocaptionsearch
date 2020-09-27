@@ -8,6 +8,9 @@ var IgniteVideoBrowser = function (name, videoUrl, captionsUrl, captionsLoadedCa
     var thisBrowser = this
     var captionsReady = false
     var videoReady = false
+    var isYouTubeVideo = false
+    var youTubeVideoId = ""
+    var youTubePlayer
 
     var videoElement = null
     var totaltimeElement = null
@@ -43,7 +46,7 @@ var IgniteVideoBrowser = function (name, videoUrl, captionsUrl, captionsLoadedCa
 
         //var timelineelement = document.querySelector(".timelines." + name)
         var timelineelement = document.querySelector(".wordstimeline." + name)
-        if(timelineelement) {
+        if (timelineelement) {
             wordsTimeline = new WordsTimeLine(thisBrowser, timelineelement)
         }
     }
@@ -52,10 +55,36 @@ var IgniteVideoBrowser = function (name, videoUrl, captionsUrl, captionsLoadedCa
         videoReady = true
     }
 
+    function onYouTubeIframeAPIReady() {
+        youTubePlayer = new YT.Player(videoElement, {
+            // height: '390',
+            // width: '640',
+            videoId: youTubeVideoId,
+            events: {
+                'onReady': videoLoaded/*,
+              'onStateChange': onPlayerStateChange*/
+            }
+        })
+    }
+
     function loadVideo() {
         if (videoElement && videoUrl) {
-            videoElement.addEventListener("canplay", videoLoaded)
-            videoElement.src = videoUrl
+            // Check for YouTube Id
+            if (videoUrl.slice(0, 3).toLowerCase() === "yt:") {
+                isYouTubeVideo = true
+                youTubeVideoId = videoUrl.slice(3)
+
+                // Set up YouTube IFRAME API
+                window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady
+                let tag = document.createElement('script');
+
+                tag.src = "https://www.youtube.com/iframe_api";
+                let firstScriptTag = document.getElementsByTagName('script')[0];
+                firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+            } else {
+                videoElement.addEventListener("canplay", videoLoaded)
+                videoElement.src = videoUrl
+            }
         }
     }
 
@@ -107,7 +136,11 @@ var IgniteVideoBrowser = function (name, videoUrl, captionsUrl, captionsLoadedCa
 
     function setvideoposition(seconds) {
         if (videoElement && videoUrl) {
-            videoElement.currentTime = seconds
+            if (isYouTubeVideo) {
+                youTubePlayer.seekTo(seconds)
+            } else {
+                videoElement.currentTime = seconds
+            }
         } else {
             window.alert("Move to: " + timefromms(seconds * 1000))
         }
@@ -120,13 +153,13 @@ var IgniteVideoBrowser = function (name, videoUrl, captionsUrl, captionsLoadedCa
     }
 
     function setupwordstimeline() {
-        if(wordsTimeline) {
+        if (wordsTimeline) {
             wordsTimeline.setup()
         }
     }
 
     function settranscriptcurrentcue(ordinal, interactive) {
-        if(transcriptBrowser) {
+        if (transcriptBrowser) {
             transcriptBrowser.setCurrentCue(ordinal, interactive)
         }
     }
@@ -152,9 +185,9 @@ var IgniteVideoBrowser = function (name, videoUrl, captionsUrl, captionsLoadedCa
 
     this.timefromms = timefromms
 
-    this.videoLastTime = function() {
+    this.videoLastTime = function () {
         if (captionsReady) {
-            return timefromms(captionsData.cues[captionsData.cues.length-1].endTime*1000).substr(0,8)
+            return timefromms(captionsData.cues[captionsData.cues.length - 1].endTime * 1000).substr(0, 8)
         } else {
             return "00:00:00"
         }
