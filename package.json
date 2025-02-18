@@ -10,6 +10,6 @@
   "license": "MIT",
   "dependencies": {
     "express": "^4.21.2",
-    "request": "^2.88.0"
+    "http-proxy-middleware": "^3.0.3"
   }
 }
