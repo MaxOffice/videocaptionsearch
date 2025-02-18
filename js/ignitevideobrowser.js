@@ -91,9 +91,13 @@ var IgniteVideoBrowser = function (name, videoUrl, captionsUrl, captionsLoadedCa
     function loadCaptions() {
         fetch(captionsUrl, { method: "GET" }).then(
             function onSRTFetched(response) {
-                var parser = new WebVTTParser()
+                //var parser = new WebVTTParser()
                 response.text().then(
                     function onSRTResponseText(resptext) {
+                        let parser = resptext.match(/^WEBVTT$/m)
+                                        ? new WebVTTParser()
+                                        : new SRTParser()
+
                         captionsData = parser.parse(resptext)
                         // Check sanity here
 
